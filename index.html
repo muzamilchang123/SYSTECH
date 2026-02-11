@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Systech Institute — Student Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <!-- ===================== LOGIN ===================== -->
+    <section id="login-page">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="login-box">
+            <div class="login-logo">
+                <div class="logo-icon"><i class="fa-solid fa-microchip"></i></div>
+                <h1>Sys<span>tech</span></h1>
+                <p class="tagline">Institute of Technology & Skill Development</p>
+            </div>
+            <form id="login-form" autocomplete="off">
+                <div class="form-field"><i class="fa-regular fa-user"></i><input type="text" id="login-username" placeholder="Username / ID" required></div>
+                <div class="form-field"><i class="fa-solid fa-lock"></i><input type="password" id="login-password" placeholder="Password" required></div>
+                <div class="role-tabs">
+                    <label><input type="radio" name="login-role" value="student" checked><span>Student</span></label>
+                    <label><input type="radio" name="login-role" value="teacher"><span>Teacher</span></label>
+                    <label><input type="radio" name="login-role" value="admin"><span>Admin</span></label>
+                </div>
+                <button type="submit" class="btn-login">Sign In <i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+            </form>
+           
+        </div>
+    </section>
+
+    <!-- ===================== APP ===================== -->
+    <div id="app" class="hide">
+        <nav class="sidebar">
+            <div class="sidebar-brand"><i class="fa-solid fa-microchip"></i><h2>Systech</h2></div>
+            <ul class="sidebar-menu" id="sidebar-menu"></ul>
+            <div class="sidebar-user">
+                <img id="sidebar-avatar" src="" alt="avatar">
+                <div><strong id="sidebar-name">Name</strong><small id="sidebar-role">Role</small></div>
+                <button id="btn-logout" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+            </div>
+        </nav>
+        <div class="main-area">
+            <header class="topbar">
+                <button class="hamburger" id="hamburger" title="Menu"><i class="fa-solid fa-bars"></i></button>
+                <h2 id="topbar-title">Dashboard</h2>
+                <div class="topbar-right"><span id="topbar-date"></span></div>
+            </header>
+            <div class="content" id="content"></div>
+        </div>
+    </div>
+
+    <!-- ===================== MODALS ===================== -->
+    <div class="modal-overlay hide" id="modal-overlay"></div>
+
+    <!-- Add Teacher -->
+    <div class="modal hide" id="modal-add-teacher">
+        <div class="modal-head"><h3><i class="fa-solid fa-chalkboard-user"></i> Add Teacher</h3><button class="modal-close" data-close title="Close"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="form-add-teacher">
+            <input type="text" name="name" placeholder="Full Name" class="input" required>
+            <input type="text" name="subject" placeholder="Subject / Department" class="input" required>
+            <input type="text" name="username" placeholder="Login Username" class="input" required>
+            <input type="password" name="password" placeholder="Login Password" class="input" required>
+            <button class="btn-primary w-full" type="submit"><i class="fa-solid fa-plus"></i> Create Teacher</button>
+        </form>
+    </div>
+
+    <!-- Add Student -->
+    <div class="modal hide" id="modal-add-student">
+        <div class="modal-head"><h3><i class="fa-solid fa-user-graduate"></i> Add Student</h3><button class="modal-close" data-close title="Close"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="form-add-student">
+            <input type="text" name="name" placeholder="Full Name" class="input" required>
+            <input type="text" name="fatherName" placeholder="Father's Name" class="input" required>
+            <input type="text" name="phone" placeholder="Phone Number" class="input" required>
+            <input type="text" name="program" placeholder="Program (e.g. BSCS, DIT)" class="input" required>
+            <input type="text" name="semester" placeholder="Semester" class="input" required>
+            <input type="text" name="username" placeholder="Student ID / Username" class="input" required>
+            <input type="password" name="password" placeholder="Login Password" class="input" required>
+            <button class="btn-primary w-full" type="submit"><i class="fa-solid fa-plus"></i> Create Student Account</button>
+        </form>
+    </div>
+
+    <!-- Add Course / Class -->
+    <div class="modal hide" id="modal-add-course">
+        <div class="modal-head"><h3><i class="fa-solid fa-layer-group"></i> Create Class</h3><button class="modal-close" data-close title="Close"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="form-add-course">
+            <input type="text" name="name" placeholder="Class Name (e.g. Web Development)" class="input" required>
+            <label class="label-sm">Assign Teacher</label>
+            <select name="teacherId" class="input" id="course-teacher-select" title="Select Teacher" required></select>
+            <label class="label-sm">Enroll Students (Ctrl+click for multiple)</label>
+            <select name="studentIds" class="input" id="course-student-select" title="Select Students" multiple size="6" required></select>
+            <button class="btn-primary w-full" type="submit"><i class="fa-solid fa-plus"></i> Create Class</button>
+        </form>
+    </div>
+
+    <!-- Edit Course Students -->
+    <div class="modal hide" id="modal-edit-course">
+        <div class="modal-head"><h3><i class="fa-solid fa-pen"></i> Edit Class</h3><button class="modal-close" data-close title="Close"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="form-edit-course">
+            <input type="hidden" id="edit-course-id">
+            <p id="edit-course-name" style="margin-bottom:14px;font-weight:600;color:var(--accent)"></p>
+            <label class="label-sm">Select Students (Ctrl+click)</label>
+            <select class="input" id="edit-course-students" title="Select Students" multiple size="6" required></select>
+            <button class="btn-primary w-full" type="submit"><i class="fa-solid fa-save"></i> Save Changes</button>
+        </form>
+    </div>
+
+    <!-- Create Assignment -->
+    <div class="modal hide" id="modal-create-assignment">
+        <div class="modal-head"><h3><i class="fa-solid fa-file-pen"></i> Create Assignment</h3><button class="modal-close" data-close title="Close"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="form-create-assignment">
+            <label class="label-sm">Select Class</label>
+            <select name="courseId" class="input" id="assign-course-select" title="Select Class" required></select>
+            <input type="text" name="title" placeholder="Assignment Title" class="input" required>
+            <textarea name="description" placeholder="Instructions / Description" class="input" rows="3" required></textarea>
+            <label class="label-sm">Due Date & Time</label>
+            <input type="datetime-local" name="dueDate" class="input" required>
+            <input type="number" name="totalMarks" placeholder="Total Marks" class="input" required min="1">
+            <button class="btn-primary w-full" type="submit"><i class="fa-solid fa-paper-plane"></i> Publish</button>
+        </form>
+    </div>
+
+    <!-- Submit Assignment (Student) -->
+    <div class="modal hide" id="modal-submit-assignment">
+        <div class="modal-head"><h3><i class="fa-solid fa-paper-plane"></i> Submit Assignment</h3><button class="modal-close" data-close title="Close"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="form-submit-assignment">
+            <input type="hidden" id="submit-ass-id">
+            <textarea name="answer" placeholder="Write your answer / paste link here..." class="input" rows="5" required></textarea>
+            <div class="file-drop"><i class="fa-solid fa-cloud-arrow-up"></i><p>Attach file (optional)</p><input type="file" id="submit-file"></div>
+            <button class="btn-primary w-full" type="submit"><i class="fa-solid fa-paper-plane"></i> Submit</button>
+        </form>
+    </div>
+
+    <!-- Add Topic -->
+    <div class="modal hide" id="modal-add-topic">
+        <div class="modal-head"><h3><i class="fa-solid fa-list-ol"></i> Add Topic</h3><button class="modal-close" data-close title="Close"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="form-add-topic">
+            <label class="label-sm">For Class</label>
+            <select name="courseId" class="input" id="topic-course-select" title="Select Class" required></select>
+            <input type="text" name="title" placeholder="Topic Title" class="input" required>
+            <label class="checkbox-label"><input type="checkbox" name="completed"> Already covered</label>
+            <button class="btn-primary w-full" type="submit"><i class="fa-solid fa-plus"></i> Add Topic</button>
+        </form>
+    </div>
+
+    <!-- Add Note -->
+    <div class="modal hide" id="modal-add-note">
+        <div class="modal-head"><h3><i class="fa-solid fa-sticky-note"></i> Post Note</h3><button class="modal-close" data-close title="Close"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="form-add-note">
+            <label class="label-sm">For Class</label>
+            <select name="courseId" class="input" id="note-course-select" title="Select Class" required></select>
+            <input type="text" name="title" placeholder="Note Title" class="input" required>
+            <textarea name="content" placeholder="Note content..." class="input" rows="5" required></textarea>
+            <button class="btn-primary w-full" type="submit"><i class="fa-solid fa-paper-plane"></i> Post</button>
+        </form>
+    </div>
+
+    <!-- Post Announcement -->
+    <div class="modal hide" id="modal-announcement">
+        <div class="modal-head"><h3><i class="fa-solid fa-bullhorn"></i> New Announcement</h3><button class="modal-close" data-close title="Close"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="form-announcement">
+            <input type="text" name="title" placeholder="Announcement Title" class="input" required>
+            <textarea name="content" placeholder="Details..." class="input" rows="4" required></textarea>
+            <label class="label-sm">Priority</label>
+            <select name="priority" class="input" title="Priority">
+                <option value="normal">Normal</option>
+                <option value="important">Important</option>
+                <option value="urgent">Urgent</option>
+            </select>
+            <button class="btn-primary w-full" type="submit"><i class="fa-solid fa-bullhorn"></i> Post Announcement</button>
+        </form>
+    </div>
+
+    <!-- Grade Submission -->
+    <div class="modal hide" id="modal-grade">
+        <div class="modal-head"><h3><i class="fa-solid fa-star"></i> Grade Submission</h3><button class="modal-close" data-close title="Close"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="form-grade">
+            <input type="hidden" id="grade-sub-id">
+            <p id="grade-info" style="margin-bottom:14px;color:var(--text-dim);font-size:.9rem"></p>
+            <input type="number" name="marks" placeholder="Marks Obtained" class="input" required min="0">
+            <textarea name="feedback" placeholder="Feedback (optional)" class="input" rows="3"></textarea>
+            <button class="btn-primary w-full" type="submit"><i class="fa-solid fa-check"></i> Save Grade</button>
+        </form>
+    </div>
+
+    <!-- Mark Attendance -->
+    <div class="modal hide" id="modal-attendance">
+        <div class="modal-head"><h3><i class="fa-solid fa-clipboard-check"></i> Mark Attendance</h3><button class="modal-close" data-close title="Close"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="form-attendance">
+            <label class="label-sm">Select Class</label>
+            <select name="courseId" class="input" id="att-course-select" title="Select Class" required></select>
+            <label class="label-sm">Date</label>
+            <input type="date" name="date" class="input" required>
+            <div id="att-student-list" style="margin-bottom:16px"></div>
+            <button class="btn-primary w-full" type="submit"><i class="fa-solid fa-check"></i> Save Attendance</button>
+        </form>
+    </div>
+
+    <!-- Add Timetable Entry -->
+    <div class="modal hide" id="modal-timetable">
+        <div class="modal-head"><h3><i class="fa-solid fa-clock"></i> Add Timetable Entry</h3><button class="modal-close" data-close title="Close"><i class="fa-solid fa-xmark"></i></button></div>
+        <form id="form-timetable">
+            <label class="label-sm">Class</label>
+            <select name="courseId" class="input" id="tt-course-select" title="Select Class" required></select>
+            <label class="label-sm">Day</label>
+            <select name="day" class="input" title="Select Day" required>
+                <option value="Monday">Monday</option><option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option><option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option><option value="Saturday">Saturday</option>
+            </select>
+            <input type="time" name="startTime" class="input" required>
+            <input type="time" name="endTime" class="input" required>
+            <input type="text" name="room" placeholder="Room No (e.g. Lab-3)" class="input" required>
+            <button class="btn-primary w-full" type="submit"><i class="fa-solid fa-plus"></i> Add Entry</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
